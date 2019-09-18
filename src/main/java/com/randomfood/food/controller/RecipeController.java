@@ -35,8 +35,8 @@ public class RecipeController {
 
     @PostMapping(value = "/addRecipe", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RecipeIngredientsDTO> addRecipe(@Valid @RequestBody RecipeIngredientsDTO recipeIngredient) {
-        log.debug("REST request to save recipe : {}", recipeIngredient);
-
+        log.debug("REST request to save Ingredient : {}", recipeIngredient);
+        log.debug("REST request to save Ingredient : {}", recipeIngredient);
 
         recipeInredientMatrixService.saveRecipeAndIngredients(recipeIngredient);
 
