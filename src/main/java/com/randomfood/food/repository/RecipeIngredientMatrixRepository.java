@@ -18,8 +18,6 @@ public interface RecipeIngredientMatrixRepository extends JpaRepository<RecipeIn
 
     List<RecipeIngredientMatrix> findByIngredientIngredientIdIn(List<Long> selectedIngredientIdList);
 
-    List<RecipeIngredientMatrix>  findByIngredientIngredientIdNotIn(List<Long> selectedIngredientIdList);
-
     void deleteByRecipeRecipeId(long recipeId);
 
 }

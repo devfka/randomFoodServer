@@ -1,7 +1,7 @@
 package com.randomfood.food.controller;
 
+import com.randomfood.food.exceptions.EntityNotFoundException;
 import com.randomfood.food.mapper.RecipeIngredientMapper;
-import com.randomfood.food.service.RecipeInredientMatrixService;
 import com.randomfood.food.types.RecipeIngredientsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,24 +12,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class RecipeIngredientMatrixController {
+public class RecipeIngredientMatrixController extends BaseController{
 
     private final Logger log = LoggerFactory.getLogger(RecipeIngredientMatrixController.class);
-
-    @Autowired
-    private RecipeInredientMatrixService recipeInredientMatrixService;
 
     @Autowired
     private RecipeIngredientMapper recipeIngredientMapper;
 
     @GetMapping(value = "/getRecipeIngredientsByRecipeId/{recipeId}")
-    public ResponseEntity<RecipeIngredientsDTO> getRecipeIngredientsByRecipeId(@PathVariable("recipeId") Long recipeId) {
+    public ResponseEntity<RecipeIngredientsDTO> getRecipeIngredientsByRecipeId(@PathVariable("recipeId") Long recipeId) throws EntityNotFoundException {
 
         return new ResponseEntity<RecipeIngredientsDTO>(this.recipeIngredientMapper.recipeIngredientMatrixListToRecipeByIngredientDTO
                 (this.recipeInredientMatrixService.findByRecipeId(recipeId)), HttpStatus.OK);
@@ -48,7 +44,7 @@ public class RecipeIngredientMatrixController {
     public ResponseEntity<List<RecipeIngredientsDTO>> getAllRecipesWithIngredientListByIngredient(@RequestParam List<Long> selectedIngredients, @RequestParam List<Long> unselectedIngredients) {
 
         return new ResponseEntity<List<RecipeIngredientsDTO>>(this.recipeIngredientMapper.recipeIngredientMatrixListToRecipeByIngredientDTOList
-                (this.recipeInredientMatrixService.findByIngredientInAndAndIngredientNotIn(selectedIngredients, unselectedIngredients)), HttpStatus.OK);
+                (this.recipeInredientMatrixService.findByIngredientInAndIngredientNotIn(selectedIngredients, unselectedIngredients)), HttpStatus.OK);
 
     }
 

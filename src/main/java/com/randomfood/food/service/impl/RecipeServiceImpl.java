@@ -38,6 +38,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
     }

@@ -1,5 +1,6 @@
 package com.randomfood.food.service.impl;
 
+import com.randomfood.food.exceptions.EntityNotFoundException;
 import com.randomfood.food.modal.Recipe;
 import com.randomfood.food.modal.RecipeIngredientMatrix;
 import com.randomfood.food.repository.RecipeIngredientMatrixRepository;
@@ -8,6 +9,8 @@ import com.randomfood.food.service.RecipeInredientMatrixService;
 import com.randomfood.food.service.RecipeService;
 import com.randomfood.food.types.IngredientDTO;
 import com.randomfood.food.types.RecipeIngredientsDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +21,9 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
 public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixService {
+
+    private final Logger log = LoggerFactory.getLogger(RecipeIngredientMatrixServiceImpl.class);
 
     @Autowired
     private RecipeIngredientMatrixRepository recipeIngredientMatrixRepository;
@@ -31,13 +35,26 @@ public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixS
     private IngredientService ingredientService;
 
     @Override
-    public List<RecipeIngredientMatrix> findByRecipeId(Long recipeId) {
-        return this.recipeIngredientMatrixRepository.findByRecipe_RecipeId(recipeId);
+    public List<RecipeIngredientMatrix> findByRecipeId(Long recipeId) throws EntityNotFoundException {
+        List<RecipeIngredientMatrix> recipeIngredientMatricexList = this.recipeIngredientMatrixRepository.findByRecipe_RecipeId(recipeId);
+
+        if (recipeIngredientMatricexList == null || recipeIngredientMatricexList.size() == 0) {
+            log.error("An Error has been occurred : " + EntityNotFoundException.errorMessage);
+            throw new EntityNotFoundException(EntityNotFoundException.errorMessage);
+        }
+        return recipeIngredientMatricexList;
     }
 
     @Override
-    public List<RecipeIngredientMatrix> findByIngredientId(Long ingredientId) {
-        return this.recipeIngredientMatrixRepository.findByIngredient_IngredientId(ingredientId);
+    public List<RecipeIngredientMatrix> findByIngredientId(Long ingredientId) throws EntityNotFoundException {
+        List<RecipeIngredientMatrix> recipeIngredientMatricexList = this.recipeIngredientMatrixRepository.findByIngredient_IngredientId(ingredientId);
+
+        if (recipeIngredientMatricexList == null || recipeIngredientMatricexList.size() == 0) {
+            log.error("An Error has been occurred : " + EntityNotFoundException.errorMessage);
+            throw new EntityNotFoundException(EntityNotFoundException.errorMessage);
+        }
+
+        return recipeIngredientMatricexList;
     }
 
 
@@ -47,7 +64,7 @@ public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixS
     }
 
     @Override
-    public List<RecipeIngredientMatrix> findByIngredientInAndAndIngredientNotIn(List<Long> selectedIngredientIdList, List<Long> unselectedIngredientIdList) {
+    public List<RecipeIngredientMatrix> findByIngredientInAndIngredientNotIn(List<Long> selectedIngredientIdList, List<Long> unselectedIngredientIdList) {
         Set<Long> recipeIdList = new HashSet<>();
         Set<Long> unSelectedrecipeIdList = new HashSet<>();
         List<RecipeIngredientMatrix> returnList = new ArrayList<>();
@@ -75,32 +92,14 @@ public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixS
         return returnList;
     }
 
-    private void findUnselectedRecipeList(List<Long> unselectedIngredientIdList, Set<Long> recipeIdList, Set<Long> unSelectedrecipeIdList, List<RecipeIngredientMatrix> selectedList) {
-        List<RecipeIngredientMatrix> unselectedList = this.recipeIngredientMatrixRepository.findByIngredientIngredientIdIn(unselectedIngredientIdList);
-        findRecipeList(unSelectedrecipeIdList, unselectedList);
-        compareRecipeLists(unSelectedrecipeIdList, recipeIdList, selectedList);
-    }
-
-    private void compareRecipeLists(Set<Long> unselectedIngredientIdList, Set<Long> recipeIdList, List<RecipeIngredientMatrix> allRecipeIngredientMatrix) {
-        for (RecipeIngredientMatrix recipeIngredientMatrix : allRecipeIngredientMatrix) {
-            if (!unselectedIngredientIdList.contains(recipeIngredientMatrix.getRecipe().getRecipeId())) {
-                recipeIdList.add(recipeIngredientMatrix.getRecipe().getRecipeId());
-            }
-        }
-    }
-
-    private void findRecipeList(Set<Long> recipeIdList, List<RecipeIngredientMatrix> allRecipeIngredientMatrix) {
-        for (RecipeIngredientMatrix recipeIngredientMatrix : allRecipeIngredientMatrix) {
-            recipeIdList.add(recipeIngredientMatrix.getRecipe().getRecipeId());
-        }
-    }
-
     @Override
+    @Transactional
     public RecipeIngredientMatrix save(RecipeIngredientMatrix recipeIngredientMatrix) {
         return this.recipeIngredientMatrixRepository.save(recipeIngredientMatrix);
     }
 
     @Override
+    @Transactional
     public void saveRecipeAndIngredients(RecipeIngredientsDTO recipeIngredientsDTO) {
         Recipe recipe;
         if (recipeIngredientsDTO.isEditMode()) {
@@ -119,6 +118,7 @@ public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixS
     }
 
     @Override
+    @Transactional
     public void deleteRecipeByRecipeId(long recipeId) {
         this.recipeIngredientMatrixRepository.deleteByRecipeRecipeId(recipeId);
     }
@@ -129,9 +129,29 @@ public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixS
                 RecipeIngredientMatrix recipeIngredientMatrix = new RecipeIngredientMatrix();
                 recipeIngredientMatrix.setOptional("N");
                 recipeIngredientMatrix.setRecipe(recipe);
-                recipeIngredientMatrix.setIngredient(this.ingredientService.findByIngredientId(ingredientDTO.getIngredientId()));
+                recipeIngredientMatrix.setIngredient(this.ingredientService.findByIngredientId(ingredientDTO.getIngredientId()).isPresent() ? this.ingredientService.findByIngredientId(ingredientDTO.getIngredientId()).get() : null);
                 this.save(recipeIngredientMatrix);
             }
+        }
+    }
+
+    private void findUnselectedRecipeList(List<Long> unselectedIngredientIdList, Set<Long> recipeIdList, Set<Long> unSelectedrecipeIdList, List<RecipeIngredientMatrix> selectedList) {
+        List<RecipeIngredientMatrix> unselectedList = this.recipeIngredientMatrixRepository.findByIngredientIngredientIdIn(unselectedIngredientIdList);
+        findRecipeList(unSelectedrecipeIdList, unselectedList);
+        compareRecipeLists(unSelectedrecipeIdList, recipeIdList, selectedList);
+    }
+
+    private void compareRecipeLists(Set<Long> unselectedIngredientIdList, Set<Long> recipeIdList, List<RecipeIngredientMatrix> allRecipeIngredientMatrix) {
+        for (RecipeIngredientMatrix recipeIngredientMatrix : allRecipeIngredientMatrix) {
+            if (!unselectedIngredientIdList.contains(recipeIngredientMatrix.getRecipe().getRecipeId())) {
+                recipeIdList.add(recipeIngredientMatrix.getRecipe().getRecipeId());
+            }
+        }
+    }
+
+    private void findRecipeList(Set<Long> recipeIdList, List<RecipeIngredientMatrix> allRecipeIngredientMatrix) {
+        for (RecipeIngredientMatrix recipeIngredientMatrix : allRecipeIngredientMatrix) {
+            recipeIdList.add(recipeIngredientMatrix.getRecipe().getRecipeId());
         }
     }
 }

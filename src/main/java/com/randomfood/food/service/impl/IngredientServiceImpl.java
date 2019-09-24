@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional
 public class IngredientServiceImpl implements IngredientService {
 
     @Autowired
@@ -27,11 +27,12 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient findByIngredientId(Long ingredientId) {
+    public Optional<Ingredient> findByIngredientId(Long ingredientId) {
         return this.ingredientRepository.findByIngredientId(ingredientId);
     }
 
     @Override
+    @Transactional
     public Ingredient saveIngredient(IngredientDTO ingredientDTO) {
         Ingredient ingredient = new Ingredient();
         ingredient.setIngredientName(ingredientDTO.getIngredientName());

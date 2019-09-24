@@ -2,8 +2,6 @@ package com.randomfood.food.types;
 
 import com.randomfood.food.modal.Ingredient;
 
-import javax.validation.constraints.Size;
-
 public class IngredientDTO {
 
     private Long ingredientId;

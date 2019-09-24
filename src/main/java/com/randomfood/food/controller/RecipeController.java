@@ -1,12 +1,9 @@
 package com.randomfood.food.controller;
 
-import com.randomfood.food.service.RecipeInredientMatrixService;
-import com.randomfood.food.service.RecipeService;
 import com.randomfood.food.types.RecipeDTO;
 import com.randomfood.food.types.RecipeIngredientsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,26 +14,19 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-public class RecipeController {
+public class RecipeController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(RecipeController.class);
 
-    @Autowired
-    private RecipeService recipeService;
-
-    @Autowired
-    private RecipeInredientMatrixService recipeInredientMatrixService;
-
-
     @GetMapping(value = "/getRecipes")
     public ResponseEntity<List<RecipeDTO>> getRecipes() {
-        return new ResponseEntity<List<RecipeDTO>>(this.recipeService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<List<RecipeDTO>>(super.recipeService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/addRecipe", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RecipeIngredientsDTO> addRecipe(@Valid @RequestBody RecipeIngredientsDTO recipeIngredient) {
         log.debug("REST request to save recipe : {}", recipeIngredient);
-        recipeInredientMatrixService.saveRecipeAndIngredients(recipeIngredient);
+        super.recipeInredientMatrixService.saveRecipeAndIngredients(recipeIngredient);
 
         return new ResponseEntity<RecipeIngredientsDTO>(recipeIngredient, HttpStatus.OK);
     }
@@ -45,7 +35,7 @@ public class RecipeController {
     public ResponseEntity<?> deleteRecipe(@PathVariable("id") long id) {
         log.debug("REST request to delete recipe : {}", id);
 
-        recipeInredientMatrixService.deleteRecipeByRecipeId(id);
+        super.recipeInredientMatrixService.deleteRecipeByRecipeId(id);
 
         return new ResponseEntity(id, HttpStatus.OK);
     }

@@ -23,12 +23,12 @@ public class Ingredient implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ingredient_id",length = 60)
+    @Column(name = "ingredient_id", length = 60)
     private Long ingredientId;
 
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name="ingredient_name", length = 100, unique = true, nullable = false)
+    @Column(name = "ingredient_name", length = 100, unique = true, nullable = false)
     private String ingredientName;
 
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -70,5 +70,30 @@ public class Ingredient implements Serializable {
 
     public void setIngredientName(String ingredientName) {
         this.ingredientName = ingredientName;
+    }
+
+    public static class IngredientBuilder {
+        private Long ingredientId;
+        private String ingredientName;
+        private Set<RecipeIngredientMatrix> recipeIngredientMatrix;
+
+        public IngredientBuilder setIngredientId(final Long ingredientId) {
+            this.ingredientId = ingredientId;
+            return this;
+        }
+
+        public IngredientBuilder setIngredientName(final String ingredientName) {
+            this.ingredientName = ingredientName;
+            return this;
+        }
+
+        public IngredientBuilder setRecipeIngredientMatrix(final Set<RecipeIngredientMatrix> recipeIngredientMatrix) {
+            this.recipeIngredientMatrix = recipeIngredientMatrix;
+            return this;
+        }
+
+        public Ingredient build() {
+            return new Ingredient(ingredientId, ingredientName, recipeIngredientMatrix);
+        }
     }
 }
