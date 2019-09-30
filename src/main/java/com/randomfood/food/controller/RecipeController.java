@@ -1,5 +1,6 @@
 package com.randomfood.food.controller;
 
+import com.randomfood.food.exceptions.EntityNotFoundException;
 import com.randomfood.food.types.RecipeDTO;
 import com.randomfood.food.types.RecipeIngredientsDTO;
 import org.slf4j.Logger;
@@ -28,14 +29,16 @@ public class RecipeController extends BaseController {
         log.debug("REST request to save recipe : {}", recipeIngredient);
         super.recipeInredientMatrixService.saveRecipeAndIngredients(recipeIngredient);
 
-        return new ResponseEntity<RecipeIngredientsDTO>(recipeIngredient, HttpStatus.OK);
+        return new ResponseEntity<RecipeIngredientsDTO>(recipeIngredient, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/deleteRecipe/{id}", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteRecipe(@PathVariable("id") long id) {
+    public ResponseEntity<?> deleteRecipe(@PathVariable("id") long id) throws EntityNotFoundException {
         log.debug("REST request to delete recipe : {}", id);
 
-        super.recipeInredientMatrixService.deleteRecipeByRecipeId(id);
+        if (super.recipeInredientMatrixService.findByRecipeId(id).size() > 0) {
+            super.recipeInredientMatrixService.deleteRecipeByRecipeId(id);
+        }
 
         return new ResponseEntity(id, HttpStatus.OK);
     }

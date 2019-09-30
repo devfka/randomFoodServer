@@ -6,6 +6,7 @@ import com.randomfood.food.repository.RecipeRepository;
 import com.randomfood.food.service.RecipeService;
 import com.randomfood.food.types.RecipeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class RecipeServiceImpl implements RecipeService {
 
     @Autowired
@@ -39,7 +39,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public Recipe save(Recipe recipe) {
+    public Recipe save(Recipe recipe) throws DataIntegrityViolationException {
         return recipeRepository.save(recipe);
     }
 }

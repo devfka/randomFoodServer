@@ -1,5 +1,10 @@
 package com.randomfood.food.types;
 
+import com.randomfood.food.modal.Ingredient;
+import com.randomfood.food.modal.Recipe;
+import com.randomfood.food.utils.Constants;
+
+import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +21,22 @@ public class RecipeIngredientsDTO {
 
     public RecipeIngredientsDTO() {
         // Empty constructor needed for Jackson.
+    }
+
+    public RecipeIngredientsDTO(Recipe recipe, List<Ingredient> ingredients) {
+
+        this.recipeId = recipe.getRecipeId();
+        this.recipeName = recipe.getRecipeName();
+
+        for(Ingredient ingredient : ingredients)
+        {
+            IngredientDTO ingredientDTO = new IngredientDTO();
+            ingredientDTO.setIngredientId(ingredient.getIngredientId());
+            ingredientDTO.setIngredientName(ingredient.getIngredientName());
+            ingredientDTO.setOptional(Constants.YES);
+            this.getIngredients().add(ingredientDTO);
+        }
+
     }
 
     public String getRecipeName() {
@@ -63,4 +84,5 @@ public class RecipeIngredientsDTO {
     public int hashCode() {
         return Objects.hash(recipeId, recipeName);
     }
+
 }
