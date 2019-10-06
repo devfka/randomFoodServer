@@ -4,9 +4,12 @@ public class Constants {
     public static final String YES = "Y";
     public static final String NO = "N";
 
-    public static final String ADMIN_GROUP = "ADMIN_GROUP";
-    public static final String USER_GROUP = "USER_GROUP";
+    public static final String ADMIN_ROLE = "ADMIN_ROLE";
+    public static final String USER_ROLE = "USER_ROLE";
 
-    public static final String ADMIN = "ADMIN";
-    public static final String USER = "USER";
+    public static final String ADMIN = "admin";
+    public static final String USER = "user";
+
+    public static final String ADMIN_PASS = "{noop}admin123";
+    public static final String USER_PASS = "{noop}user123";
 }

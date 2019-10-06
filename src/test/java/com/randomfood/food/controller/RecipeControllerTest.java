@@ -6,6 +6,7 @@ import com.randomfood.food.TestConstants;
 import com.randomfood.food.modal.Ingredient;
 import com.randomfood.food.modal.Recipe;
 import com.randomfood.food.types.RecipeIngredientsDTO;
+import com.randomfood.food.utils.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,12 +46,12 @@ class RecipeControllerTest {
 
     @BeforeEach
     void setUp() {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-//                .apply(springSecurity())
-//                .build();
-
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
                 .build();
+
+//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+//                .build();
 
         recipe = new Recipe.RecipeBuilder()
                 .setRecipeId(TestConstants.recipe_id)
@@ -69,7 +72,8 @@ class RecipeControllerTest {
     }
 
     @Test
-    void getRecipes() throws Exception {
+    @WithMockUser(roles = Constants.USER_ROLE)
+    void getRecipes2() throws Exception {
 
         mockMvc.perform(get("/getRecipes/"))
                 .andExpect(status().isOk())
@@ -79,10 +83,43 @@ class RecipeControllerTest {
                 .andExpect(jsonPath("$[0].recipeName", is("sucuklu kuru fasulye")))
                 .andDo(print())
                 .andReturn();
-
     }
 
     @Test
+    @WithMockUser(roles = Constants.ADMIN_ROLE)
+    void getRecipes3() throws Exception {
+
+        mockMvc.perform(get("/getRecipes/"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].recipeId", is(1)))
+                .andExpect(jsonPath("$[0].recipeName", is("sucuklu kuru fasulye")))
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    void getRecipes4() throws Exception {
+
+        mockMvc.perform(get("/getRecipes/"))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    @WithMockUser(roles = "Unknown")
+    void getRecipes5() throws Exception {
+
+        mockMvc.perform(get("/getRecipes/"))
+                .andExpect(status().isForbidden()) //we can improve this as returning unauthorized error.
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    @WithMockUser(roles = Constants.ADMIN_ROLE)
     void addRecipe() throws Exception {
 
         RecipeIngredientsDTO recipeIngredientsDTO = new RecipeIngredientsDTO(recipe, Arrays.asList(ingredient));
@@ -98,6 +135,7 @@ class RecipeControllerTest {
 
 
     @Test
+    @WithMockUser(roles = Constants.ADMIN_ROLE)
     void addRecipe2() throws Exception {
 
         //BAD REQUEST
@@ -111,6 +149,24 @@ class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = Constants.USER_ROLE)
+    void addRecipe3() throws Exception {
+
+        //UnAuthorized
+
+        RecipeIngredientsDTO recipeIngredientsDTO = new RecipeIngredientsDTO(recipe, Arrays.asList(ingredient));
+
+        mockMvc.perform(post("/addRecipe/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(recipeIngredientsDTO)))
+                .andExpect(status().isForbidden())
+                .andDo(print())
+                .andReturn();
+
+    }
+
+    @Test
+    @WithMockUser(roles = Constants.ADMIN_ROLE)
     void deleteRecipe() throws Exception {
         mockMvc.perform(get("/deleteRecipe/{id}", 2L)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -127,6 +183,7 @@ class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = Constants.ADMIN_ROLE)
     void deleteRecipe2() throws Exception {
 
         //Entity Not Found Exception
@@ -134,6 +191,26 @@ class RecipeControllerTest {
         mockMvc.perform(get("/deleteRecipe/{id}", 256L)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    void deleteRecipe3() throws Exception {
+        mockMvc.perform(get("/deleteRecipe/{id}", 2L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andReturn();
+
+    }
+
+    @Test
+    @WithMockUser(roles = Constants.USER_ROLE)
+    void deleteRecipe4() throws Exception {
+        mockMvc.perform(get("/deleteRecipe/{id}", 2L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
                 .andDo(print())
                 .andReturn();
     }
