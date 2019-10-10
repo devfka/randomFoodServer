@@ -5,7 +5,7 @@
 --User Table
 insert into recipe (recipe_id, recipe_name) values (1, 'sucuklu kuru fasulye');
 insert into recipe (recipe_id, recipe_name) values (2, 'penne bolonez');
-insert into recipe (recipe_id, recipe_name) values (3, 'asdasdasdadsa');
+insert into recipe (recipe_id, recipe_name) values (3, 'manti');
 
 insert into ingredient (ingredient_id, ingredient_name) values (1, 'sucuk');
 insert into ingredient (ingredient_id, ingredient_name) values (2, 'kuru fasulye');

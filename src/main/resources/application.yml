@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+email: default@info.com
+
+spring:
+  profiles:
+    active: default
+  application:
+    name: Random Food Application
+  h2:
+    console:
+      enabled: true
+#  datasource:
+#    url: jdbc:mysql://localhost/dev
+#    jndi-name: dev-jndi
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    properties:
+#      hibernate.format_sql: true
+#      hibernate.id.new_generator_mappings: true
+#      hibernate.cache.use_second_level_cache: true
+#      hibernate.cache.use_query_cache: false
+#      hibernate.generate_statistics: true
+
+logging:
+  level:
+    root: WARN
+    com.randomfood.food: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
