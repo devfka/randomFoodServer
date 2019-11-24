@@ -2,10 +2,28 @@
  * CREATE Script for init of DB
  */
 
+CREATE TABLE recipe (
+    recipe_id int,
+    recipe_name varchar(255)
+);
+
+use RandomFood_DB;
+CREATE TABLE ingredient (
+    ingredient_id int,
+    ingredient_name varchar(255)
+);
+
+CREATE TABLE recipe_ingredient_matrix (
+    id int,
+    recipe_id int,
+    ingredient_id int,
+    optional varchar(255)
+);
+
 --User Table
 insert into recipe (recipe_id, recipe_name) values (1, 'sucuklu kuru fasulye');
 insert into recipe (recipe_id, recipe_name) values (2, 'penne bolonez');
-insert into recipe (recipe_id, recipe_name) values (3, 'asdasdasdadsa');
+insert into recipe (recipe_id, recipe_name) values (3, 'manti');
 
 insert into ingredient (ingredient_id, ingredient_name) values (1, 'sucuk');
 insert into ingredient (ingredient_id, ingredient_name) values (2, 'kuru fasulye');

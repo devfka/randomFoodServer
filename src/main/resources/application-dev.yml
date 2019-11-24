@@ -8,23 +8,22 @@ spring:
     active: dev
   application:
     name: Random Food Application (Dev)
-  h2:
-    console:
-      enabled: true
   datasource:
-    url: jdbc:h2:mem:test
-    driver-class-name: org.h2.Driver
-#  jpa:
+    url: jdbc:mysql://food-db.chbqadkiacz2.eu-west-1.rds.amazonaws.com:3306/dbfood
+    username: sysadmin
+    password: 024680Aws
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
 #    hibernate:
 #      ddl-auto: create-drop
-#    show-sql: true
-#    properties:
-#      hibernate.format_sql: true
-#      hibernate.id.new_generator_mappings: true
-#      hibernate.cache.use_second_level_cache: true
-#      hibernate.cache.use_query_cache: false
-#      hibernate.generate_statistics: true
-
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        generate_statistics: true
+        id:
+          new_generator_mappings: true
 logging:
   level:
     root: WARN
