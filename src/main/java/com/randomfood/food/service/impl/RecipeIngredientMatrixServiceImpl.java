@@ -36,13 +36,13 @@ public class RecipeIngredientMatrixServiceImpl implements RecipeInredientMatrixS
 
     @Override
     public List<RecipeIngredientMatrix> findByRecipeId(Long recipeId) throws EntityNotFoundException {
-        List<RecipeIngredientMatrix> recipeIngredientMatricexList = this.recipeIngredientMatrixRepository.findByRecipe_RecipeId(recipeId);
+        List<RecipeIngredientMatrix> recipeIngredientMatrixList = this.recipeIngredientMatrixRepository.findByRecipe_RecipeId(recipeId);
 
-        if (recipeIngredientMatricexList == null || recipeIngredientMatricexList.size() == 0) {
+        if (recipeIngredientMatrixList == null || recipeIngredientMatrixList.size() == 0) {
             log.error("An Error has been occurred : " + EntityNotFoundException.errorMessage);
             throw new EntityNotFoundException(EntityNotFoundException.errorMessage);
         }
-        return recipeIngredientMatricexList;
+        return recipeIngredientMatrixList;
     }
 
     @Override
