@@ -1,0 +1,7 @@
+com\randomfood\food\controller\RecipeControllerTest.class
+com\randomfood\food\repository\IngredientRepositoryTest.class
+com\randomfood\food\modal\RecipeTest.class
+com\randomfood\food\RandomFoodApplicationTests.class
+com\randomfood\food\TestConstants.class
+com\randomfood\food\repository\RecipeRepositoryTest.class
+com\randomfood\food\service\impl\RecipeServiceImplTest.class
