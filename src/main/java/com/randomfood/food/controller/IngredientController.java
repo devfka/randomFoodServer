@@ -2,7 +2,6 @@ package com.randomfood.food.controller;
 
 import com.randomfood.food.service.IngredientService;
 import com.randomfood.food.types.IngredientDTO;
-import com.randomfood.food.types.RecipeIngredientsDTO;
 import com.randomfood.food.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
