@@ -1,13 +1,15 @@
 /**
  * CREATE Script for init of DB
  */
+create database food_db
+use food_db;
+
 
 CREATE TABLE recipe (
     recipe_id int,
     recipe_name varchar(255)
 );
 
-use RandomFood_DB;
 CREATE TABLE ingredient (
     ingredient_id int,
     ingredient_name varchar(255)

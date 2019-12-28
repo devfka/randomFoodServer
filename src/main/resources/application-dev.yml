@@ -9,9 +9,9 @@ spring:
   application:
     name: Random Food Application (Dev)
   datasource:
-    url: jdbc:mysql://food-db.chbqadkiacz2.eu-west-1.rds.amazonaws.com:3306/dbfood
-    username: sysadmin
-    password: 024680Aws
+    url: dblink
+    username: user
+    password: pwd
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
 #    hibernate:
