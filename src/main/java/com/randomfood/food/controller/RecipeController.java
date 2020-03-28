@@ -33,7 +33,7 @@ public class RecipeController extends BaseController {
     @PostMapping(value = "/addRecipe", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('" + Constants.ADMIN_ROLE + "')")
     public ResponseEntity<RecipeIngredientsDTO> addRecipe(@Valid @RequestBody RecipeIngredientsDTO recipeIngredient) {
-        log.debug("REST request to save recipe : {}", recipeIngredient);
+        log.debug("REST request to save recipe : {} ", recipeIngredient);
         super.recipeInredientMatrixService.saveRecipeAndIngredients(recipeIngredient);
 
         return new ResponseEntity<RecipeIngredientsDTO>(recipeIngredient, HttpStatus.CREATED);
@@ -43,6 +43,7 @@ public class RecipeController extends BaseController {
     @PreAuthorize("hasRole('" + Constants.ADMIN_ROLE + "')")
     public ResponseEntity<?> deleteRecipe(@PathVariable("id") long id) throws EntityNotFoundException {
         log.debug("REST request to delete recipe : {}", id);
+        log.debug("test 1");
 
         if (super.recipeInredientMatrixService.findByRecipeId(id).size() > 0) {
             super.recipeInredientMatrixService.deleteRecipeByRecipeId(id);
