@@ -43,7 +43,7 @@ public class RecipeController extends BaseController {
     @PreAuthorize("hasRole('" + Constants.ADMIN_ROLE + "')")
     public ResponseEntity<?> deleteRecipe(@PathVariable("id") long id) throws EntityNotFoundException {
         log.debug("REST request to delete recipe : {}", id);
-        log.debug("test 7");
+        log.debug("test 8");
 
         if (super.recipeInredientMatrixService.findByRecipeId(id).size() > 0) {
             super.recipeInredientMatrixService.deleteRecipeByRecipeId(id);
