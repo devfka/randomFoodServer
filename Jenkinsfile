@@ -1,7 +1,6 @@
 pipeline {
-    agent none
     stages {
-        stage('Maven Install') {
+        stage('Build') {
             steps {
                 sh 'mvn clean install'
             }
