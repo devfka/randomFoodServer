@@ -1,8 +1,13 @@
 pipeline {
+    agent any
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+
+                script {
+                    def os = System.properties['os.name'].toLowerCase()
+                    echo "OS: ${os}"
+                      sh "mvn clean install"
             }
         }
     }
