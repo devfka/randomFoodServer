@@ -6,5 +6,11 @@ pipeline {
                 sh "mvn clean install -DskipTests"
             }
         }
+        stage('Docker Build') {
+        agent any
+            steps {
+                  sh 'docker image build -t food .'
+            }
+        }
     }
 }
