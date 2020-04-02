@@ -3,11 +3,17 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-
-                script {
-                    def os = System.properties['os.name'].toLowerCase()
-                    echo "OS: ${os}"
-                      sh "mvn clean install"
+                sh "mvn clean install -DskipTests"
+            }
+        }
+        stage('Test') {
+            steps {
+                //
+            }
+        }
+        stage('Deploy') {
+            steps {
+                //
             }
         }
     }
