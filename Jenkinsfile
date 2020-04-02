@@ -6,15 +6,5 @@ pipeline {
                 sh "mvn clean install -DskipTests"
             }
         }
-        stage('Test') {
-            steps {
-                //
-            }
-        }
-        stage('Deploy') {
-            steps {
-                //
-            }
-        }
     }
 }
