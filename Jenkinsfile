@@ -16,6 +16,7 @@ pipeline {
             agent any
             steps {
                 withCredentials([usernamePassword(credentialsId: 'myDocker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+                sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
                 sh 'docker push dockerfka/food:latest'
                 }
             }
