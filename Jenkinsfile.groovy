@@ -7,20 +7,19 @@ pipeline {
             }
         }
         stage('Docker Build') {
-        agent any
+            agent any
             steps {
-                  sh 'docker image build -t food .'
+                sh 'docker image build -t dockerfka/food .'
             }
         }
         stage('Docker Push') {
-        agent any
+            agent any
             steps {
                 //withCredentials([usernamePassword(credentialsId: 'myDocker', url:'https://hub.docker.com/repository/docker/dockerfka/food')])
                 //{
-                    sh 'docker push dockerfka/food:latest'
-        //}
-      }
-    }
-
+                sh 'docker push dockerfka/food:latest'
+                //}
+            }
+        }
     }
 }
