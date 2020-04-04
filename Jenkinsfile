@@ -6,6 +6,11 @@ pipeline {
                 sh "mvn clean install -DskipTests"
             }
         }
+        stage('Test') {
+                    steps {
+                        sh "mvn test"
+                    }
+        }
         stage('Docker Build') {
             agent any
             steps {
