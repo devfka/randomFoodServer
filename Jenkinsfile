@@ -15,6 +15,7 @@ pipeline {
             agent any
             steps {
                 sh 'docker image build -t dockerfka/food .'
+                sh 'sudo chmod 777 /var/run/docker.sock'
             }
         }
         stage('Docker Push') {

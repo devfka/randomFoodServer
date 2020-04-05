@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.randomfood.food.controller.RecipeControllerTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 41.731 s - in com.randomfood.food.controller.RecipeControllerTest
