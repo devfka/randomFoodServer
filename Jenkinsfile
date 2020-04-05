@@ -10,6 +10,7 @@ pipeline {
                     steps {
                         sh "mvn test"
                         echo 'sudo chmod 777 /var/run/docker.sock'
+                        sh 'sudo -i'
                         sh 'chmod 777 /var/run/docker.sock'
                     }
         }
