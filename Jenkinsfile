@@ -10,7 +10,7 @@ pipeline {
                     steps {
                         sh "mvn test"
                         echo 'sudo chmod 777 /var/run/docker.sock'
-                        sh 'sudo chmod 777 /var/run/docker.sock'
+                        sh 'chmod 777 /var/run/docker.sock'
                     }
         }
         stage('Docker Build') {
